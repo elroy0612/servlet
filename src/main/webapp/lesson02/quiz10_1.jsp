@@ -127,39 +127,63 @@
 %>
 
 <%
-	String search = "";
-	if (request.getParameter("search") == null) {
-		search = "";
-	} else {
-		search = request.getParameter("search");
-	}
-	
-	int id = 0;
-	if (request.getParameter("id") == null) {
-		id = 0;
-	} else {
-		id = Integer.parseInt(request.getParameter("id"));
-	}
-	
 	Map<String, Object> target = null;
 	
-	for (Map<String, Object> music : musicList) {
-		if (id == (int)(music.get("id")) || search.equals(music.get("title"))) {
-			target = music;
-			break;
+	// 1) 목록에서 클릭(id)
+	if (request.getParameter("id") != null) {
+		int id = Integer.parseInt(request.getParameter("id"));
+		for (Map<String, Object> music : musicList) {
+			if (id == (int)(music.get("id"))) {
+				target = music;
+				break;
+			}
 		}
 	}
 	
-	if (target == null) {
-		return;
+	// 2) 상단에서 검색
+	String search = request.getParameter("search");
+	if (search != null) {
+		for (Map<String, Object> music : musicList) {
+			if (music.get("title").equals(search)) {
+				target = music;
+				break;
+			}
+		}
 	}
+
+//	String search = "";
+//	if (request.getParameter("search") == null) {
+//		search = "";
+//	} else {
+//		search = request.getParameter("search");
+//	}
+//	
+//	int id = 0;
+//	if (request.getParameter("id") == null) {
+//		id = 0;
+//	} else {
+//		id = Integer.parseInt(request.getParameter("id"));
+//	}
+//	
+//	Map<String, Object> target = null;
+//	
+//	for (Map<String, Object> music : musicList) {
+//		if (id == (int)(music.get("id")) || search.equals(music.get("title"))) {
+//			target = music;
+//			break;
+//		}
+//	}
+//	
+//	if (target == null) {
+//		return;
+//	}
 %>
 	<div id="warp" class="container">
 		<header class="d-flex justify-content-start align-items-center">
 			<a href="/lesson02/quiz10.jsp"><h1 class="text-success mr-5">Melong</h1></a>
 			<form method="get" action="/lesson02/quiz10_1.jsp" class="col-4">
 				<div class="input-group">
-				  <input type="text" name="search" class="form-control" value="<%= target.get("title") %>">
+				  <input type="text" name="search" class="form-control" value="<%= request.getParameter("id") == null ? target.get("title") : "" %>">
 				  <div class="input-group-append">
 				    <button class="btn btn-secondary btn-info text-white" type="submit">검색</button>
 				  </div>

@@ -182,16 +182,22 @@
 </body>
 <script>
 	$(function() {
-		$("#btn").on("click", fuction() {
+		$("#btn").on("click", function(e) {
 			let search = $("#search").val();
+			let flag = true;
 			<%
 				for (Map<String, Object> inventory : musicList) {
 			%>
-			if (search == <%= inventory.get("title") %>)
+					if (search === "<%= inventory.get("title") %>") {
+						flag = false;
+					}
 			<%
 				}
 			%>
-			alret("해당 노래는 없습니다.")
+				if (flag) {
+					alert("해당 노래는 없습니다.")
+					e.preventDefault();
+				}
 		})
 	});
 </script>
